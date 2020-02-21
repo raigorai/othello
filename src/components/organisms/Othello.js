@@ -125,22 +125,17 @@ const Othello = () => {
 
     DIRECTION.map(direction => {
       const [_x, _y] = nextXY(x, y, 1, direction);
-      if (outsideCheck(_x, _y)) {
+      if (outsideCheck(_x, _y) || !isSpace(_x, _y)) {
         return null;
       }
-      if (isSpace(_x, _y)) {
-        return [_x, _y];
-      }
-      return null;
+      return [_x, _y];
     })
       .filter(Boolean)
-      .forEach(target => {
+      .forEach(add => {
         if (
-          !cloneRegion.find(
-            clone => target[0] === clone[0] && target[1] === clone[1]
-          )
+          !cloneRegion.find(clone => add[0] === clone[0] && add[1] === clone[1])
         ) {
-          cloneRegion.push(target);
+          cloneRegion.push(add);
         }
       });
     return cloneRegion;
