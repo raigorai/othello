@@ -120,7 +120,7 @@ const Othello = () => {
 
   const culcRegion = (x, y) => {
     const cloneRegion = cloneDeep(region).filter(
-      r => !(r[0] === x && r[1] === y)
+      c => !(c[0] === x && c[1] === y)
     );
 
     DIRECTION.map(direction => {
@@ -131,11 +131,9 @@ const Othello = () => {
       return [_x, _y];
     })
       .filter(Boolean)
-      .forEach(add => {
-        if (
-          !cloneRegion.find(clone => add[0] === clone[0] && add[1] === clone[1])
-        ) {
-          cloneRegion.push(add);
+      .forEach(t => {
+        if (!cloneRegion.find(c => t[0] === c[0] && t[1] === c[1])) {
+          cloneRegion.push(t);
         }
       });
     return cloneRegion;
