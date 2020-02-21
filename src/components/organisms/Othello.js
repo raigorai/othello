@@ -18,6 +18,7 @@ const useStyles = makeStyles(() => ({
 
 const B = -1;
 const W = 1;
+const DIRECTION = ["T", "TR", "R", "BR", "B", "BL", "L", "TL"];
 
 const Othello = () => {
   const [board, setBoard] = useState([
@@ -114,24 +115,20 @@ const Othello = () => {
     if (!checkRegion(x, y)) {
       return false;
     }
-    return ["T", "TR", "R", "BR", "B", "BL", "L", "TL"].find(
-      direction => flipLine(x, y, direction).length
-    );
+    return DIRECTION.find(direction => flipLine(x, y, direction).length);
   };
 
   const culcRegion = (x, y) => {
-    const targetRegion = ["T", "TR", "R", "BR", "B", "BL", "L", "TL"]
-      .map(direction => {
-        const [_x, _y] = nextXY(x, y, 1, direction);
-        if (outsideCheck(_x, _y)) {
-          return null;
-        }
-        if (isSpace(_x, _y)) {
-          return [_x, _y];
-        }
+    const targetRegion = DIRECTION.map(direction => {
+      const [_x, _y] = nextXY(x, y, 1, direction);
+      if (outsideCheck(_x, _y)) {
         return null;
-      })
-      .filter(Boolean);
+      }
+      if (isSpace(_x, _y)) {
+        return [_x, _y];
+      }
+      return null;
+    }).filter(Boolean);
     const cloneRegion = cloneDeep(region).filter(
       r => !(r[0] === x && r[1] === y)
     );
@@ -149,8 +146,7 @@ const Othello = () => {
   };
 
   const put = (x, y) => {
-    const filipStone = ["T", "TR", "R", "BR", "B", "BL", "L", "TL"]
-      .map(direction => flipLine(x, y, direction))
+    const filipStone = DIRECTION.map(direction => flipLine(x, y, direction))
       .filter(result => result.length)
       .flat();
 
