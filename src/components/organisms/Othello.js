@@ -85,7 +85,7 @@ const Othello = () => {
     }
   };
 
-  const isPutLine = (x, y, direction) => {
+  const flipLine = (x, y, direction) => {
     let isDifferent = false;
     let isSame = false;
     const target = [];
@@ -109,12 +109,12 @@ const Othello = () => {
     return [];
   };
 
-  const canPut = (x, y) => {
+  const isPut = (x, y) => {
     if (!checkRegion(x, y)) {
       return false;
     }
     return ["T", "TR", "R", "BR", "B", "BL", "L", "TL"].find(
-      direction => isPutLine(x, y, direction).length
+      direction => flipLine(x, y, direction).length
     );
   };
 
@@ -150,7 +150,7 @@ const Othello = () => {
 
   const put = (x, y) => {
     const filipStone = ["T", "TR", "R", "BR", "B", "BL", "L", "TL"]
-      .map(direction => isPutLine(x, y, direction))
+      .map(direction => flipLine(x, y, direction))
       .filter(result => result.length)
       .flat();
 
@@ -168,12 +168,12 @@ const Othello = () => {
   const classes = useStyles();
   return board.map((row, y) => (
     <Grid container key={`row${y}`}>
-      {row.map((val, x) => {
+      {row.map((value, x) => {
         return (
-          <Grid item className={classes.squere}>
+          <Grid item className={classes.squere} key={`item${x}${y}`}>
             <Stone
-              value={board[y][x]}
-              canPut={canPut(x, y)}
+              value={value}
+              isPut={isPut(x, y)}
               onClick={() => {
                 put(x, y);
               }}

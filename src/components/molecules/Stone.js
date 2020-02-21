@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
-import { grey, green, blue } from "@material-ui/core/colors";
+import { grey, green } from "@material-ui/core/colors";
 import clsx from "clsx";
 
 const useStyle = makeStyles(() => ({
@@ -16,13 +16,13 @@ const useStyle = makeStyles(() => ({
     backgroundColor: grey[50],
     borderRadius: 50
   },
-  canput: {
+  isPut: {
     backgroundColor: green[500],
     borderRadius: 50
   }
 }));
 
-const Stone = ({ value, canPut, onClick }) => {
+const Stone = ({ value, isPut, onClick }) => {
   const classes = useStyle();
   const showStone = value => {
     switch (value) {
@@ -31,14 +31,14 @@ const Stone = ({ value, canPut, onClick }) => {
       case 1:
         return classes.white;
       default:
-        return canPut ? classes.canput : null;
+        return isPut ? classes.isPut : null;
     }
   };
   return (
     <div
       className={clsx(classes.stone, showStone(value))}
       onClick={() => {
-        if (canPut) {
+        if (isPut) {
           onClick();
         }
       }}
