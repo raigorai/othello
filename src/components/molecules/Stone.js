@@ -6,19 +6,17 @@ import clsx from "clsx";
 const useStyle = makeStyles(() => ({
   stone: {
     width: 64,
-    height: 64
+    height: 64,
+    borderRadius: 50
   },
   black: {
-    backgroundColor: grey[900],
-    borderRadius: 50
+    backgroundColor: grey[900]
   },
   white: {
-    backgroundColor: grey[50],
-    borderRadius: 50
+    backgroundColor: grey[50]
   },
   isPut: {
-    backgroundColor: green[500],
-    borderRadius: 50
+    backgroundColor: green[500]
   }
 }));
 
