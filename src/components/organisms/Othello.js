@@ -62,6 +62,10 @@ const Othello = () => {
     return region.find(r => r[0] === x && r[1] === y);
   };
 
+  const outsideCheck = (x, y) => {
+    return x < 0 || x > 7 || y < 0 || y > 7;
+  };
+
   const nextXY = (x, y, i, direction) => {
     switch (direction) {
       case "T":
@@ -92,7 +96,7 @@ const Othello = () => {
 
     for (let i = 1; ; i++) {
       const [_x, _y] = nextXY(x, y, i, direction);
-      if (_x < 0 || _x > 7 || _y < 0 || _y > 7 || isSpace(_x, _y)) {
+      if (outsideCheck(_x, _y) || isSpace(_x, _y)) {
         break;
       }
 
@@ -121,9 +125,8 @@ const Othello = () => {
   const culcRegion = (x, y) => {
     const targetRegion = ["T", "TR", "R", "BR", "B", "BL", "L", "TL"]
       .map(direction => {
-        //console.log(direction, x, y);
         const [_x, _y] = nextXY(x, y, 1, direction);
-        if (_x < 0 || _x > 7 || _y < 0 || _y > 7) {
+        if (outsideCheck(_x, _y)) {
           return null;
         }
         if (isSpace(_x, _y)) {
@@ -168,19 +171,17 @@ const Othello = () => {
   const classes = useStyles();
   return board.map((row, y) => (
     <Grid container key={`row${y}`}>
-      {row.map((value, x) => {
-        return (
-          <Grid item className={classes.squere} key={`item${x}${y}`}>
-            <Stone
-              value={value}
-              isPut={isPut(x, y)}
-              onClick={() => {
-                put(x, y);
-              }}
-            />
-          </Grid>
-        );
-      })}
+      {row.map((value, x) => (
+        <Grid item className={classes.squere} key={`item${x}${y}`}>
+          <Stone
+            value={value}
+            isPut={isPut(x, y)}
+            onClick={() => {
+              put(x, y);
+            }}
+          />
+        </Grid>
+      ))}
     </Grid>
   ));
 };
