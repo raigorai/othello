@@ -119,7 +119,11 @@ const Othello = () => {
   };
 
   const culcRegion = (x, y) => {
-    const targetRegion = DIRECTION.map(direction => {
+    const cloneRegion = cloneDeep(region).filter(
+      r => !(r[0] === x && r[1] === y)
+    );
+
+    DIRECTION.map(direction => {
       const [_x, _y] = nextXY(x, y, 1, direction);
       if (outsideCheck(_x, _y)) {
         return null;
@@ -128,20 +132,17 @@ const Othello = () => {
         return [_x, _y];
       }
       return null;
-    }).filter(Boolean);
-    const cloneRegion = cloneDeep(region).filter(
-      r => !(r[0] === x && r[1] === y)
-    );
-
-    targetRegion.forEach(target => {
-      if (
-        !cloneRegion.find(
-          clone => target[0] === clone[0] && target[1] === clone[1]
-        )
-      ) {
-        cloneRegion.push(target);
-      }
-    });
+    })
+      .filter(Boolean)
+      .forEach(target => {
+        if (
+          !cloneRegion.find(
+            clone => target[0] === clone[0] && target[1] === clone[1]
+          )
+        ) {
+          cloneRegion.push(target);
+        }
+      });
     return cloneRegion;
   };
 
