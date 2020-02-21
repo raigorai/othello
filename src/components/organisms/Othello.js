@@ -47,16 +47,13 @@ const Othello = () => {
   ]);
   const [current, setCurrent] = useState(B);
 
-  const isBlack = (x, y) => {
-    return board[y][x] === B;
-  };
-  const isWhite = (x, y) => {
-    return board[y][x] === W;
-  };
   const isSpace = (x, y) => {
     return board[y][x] === 0;
   };
-  const isBorW = current === B ? isBlack : isWhite;
+
+  const isBorW = (x, y) => {
+    return board[y][x] === current;
+  };
 
   const checkRegion = (x, y) => {
     return region.find(r => r[0] === x && r[1] === y);
