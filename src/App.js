@@ -5,7 +5,7 @@ import Othello from "./components/organisms/Othello";
 function App() {
   return (
     <div className="App">
-      <Othello></Othello>
+      <Othello />
     </div>
   );
 }

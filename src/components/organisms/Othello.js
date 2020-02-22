@@ -156,6 +156,7 @@ const Othello = () => {
   };
 
   const classes = useStyles();
+
   return board.map((row, y) => (
     <Grid container key={`row${y}`}>
       {row.map((value, x) => (
