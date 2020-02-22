@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { cloneDeep } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
 
 import { Grid, makeStyles } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
@@ -8,7 +8,6 @@ import Stone from "../molecules/Stone";
 const useStyles = makeStyles(() => ({
   squere: {
     padding: 8,
-
     backgroundColor: green[800],
     border: "solid",
     borderWidth: 3,
@@ -46,18 +45,18 @@ const Othello = () => {
     [5, 4],
     [5, 5]
   ]);
-  const [current, setCurrent] = useState(B);
+  const [turn, setTurn] = useState(B);
 
   const isSpace = (x, y) => {
     return board[y][x] === 0;
   };
 
   const isBorW = (x, y) => {
-    return board[y][x] === current;
+    return board[y][x] === turn;
   };
 
   const checkRegion = (x, y) => {
-    return region.find(r => r[0] === x && r[1] === y);
+    return region.find(r => isEqual(r, [x, y]));
   };
 
   const outsideCheck = (x, y) => {
@@ -118,10 +117,21 @@ const Othello = () => {
     return DIRECTION.find(direction => flipLine(x, y, direction).length);
   };
 
+  const culcBoard = (x, y) => {
+    const filipStone = DIRECTION.map(direction => flipLine(x, y, direction))
+      .filter(result => result.length)
+      .flat();
+
+    const _board = cloneDeep(board);
+    filipStone.forEach(t => {
+      _board[t[1]][t[0]] = turn;
+    });
+    _board[y][x] = turn;
+    return _board;
+  };
+
   const culcRegion = (x, y) => {
-    const cloneRegion = cloneDeep(region).filter(
-      c => !(c[0] === x && c[1] === y)
-    );
+    const _region = cloneDeep(region).filter(c => !isEqual(c, [x, y]));
 
     DIRECTION.map(direction => {
       const [_x, _y] = nextXY(x, y, 1, direction);
@@ -132,27 +142,17 @@ const Othello = () => {
     })
       .filter(Boolean)
       .forEach(t => {
-        if (!cloneRegion.find(c => t[0] === c[0] && t[1] === c[1])) {
-          cloneRegion.push(t);
+        if (!_region.find(r => isEqual(t, r))) {
+          _region.push(t);
         }
       });
-    return cloneRegion;
+    return _region;
   };
 
   const put = (x, y) => {
-    const filipStone = DIRECTION.map(direction => flipLine(x, y, direction))
-      .filter(result => result.length)
-      .flat();
-
-    const cloneBoard = cloneDeep(board);
-    filipStone.forEach(t => {
-      cloneBoard[t[1]][t[0]] = current;
-    });
-    cloneBoard[y][x] = current;
-
     setRegion(culcRegion(x, y));
-    setBoard(cloneBoard);
-    setCurrent(current * -1);
+    setBoard(culcBoard(x, y));
+    setTurn(turn * -1);
   };
 
   const classes = useStyles();
